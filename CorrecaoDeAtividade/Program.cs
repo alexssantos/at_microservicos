@@ -1,10 +1,7 @@
+using CorrecaoDeAtividade.Services;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CorrecaoDeAtividade
@@ -13,6 +10,16 @@ namespace CorrecaoDeAtividade
     {
         public static void Main(string[] args)
         {
+            Parallel.Invoke(() =>
+            {
+                var keepRunning = true;
+                while (keepRunning)
+                {
+                    CorrecaoService.ConsumirAtvidadesConcluidas();
+                    Thread.Sleep(1000);
+                }
+            });
+
             CreateHostBuilder(args).Build().Run();
         }
 
